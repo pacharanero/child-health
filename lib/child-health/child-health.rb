@@ -15,13 +15,13 @@ module ChildHealth
 
   class Child
 
-    attr_accessor :age, :sex, :weight, :height
+    attr_accessor :age, :sex, :weight, :height, :bmi
 
     def initialize(age: "0", sex: "nil", weight: "0", height: "0") # named parameters can be given in any order, some can be Nil
       @age = age
       @sex = sex 
-      @height = height
-      @weight = weight
+      @height = height.to_f
+      @weight = weight.to_f
     end
 
     def height_centile
@@ -33,7 +33,7 @@ module ChildHealth
     end
 
     def bmi_centile
-      @bmi = @weight / (@height**2)
+      @bmi = @weight / ((@height/100)**2) # height converted from cm to m for this calculation only
       uk_centile @bmi, "bmi_centile"
     end
 
@@ -42,6 +42,13 @@ module ChildHealth
     def uk_centile(child_measurement, centile_type)
 
       # UK centiles use the WHO charts from 0-4 years, and the UK90 charts from 4-18 years old
+
+      # these debugging notices need to go in a Logger really
+      puts "   Child.age = #{@age} months"
+      puts "   Child.sex = #{@sex}"
+      puts "Child.height = #{@height} cm"
+      puts "Child.weight = #{@weight} kg"
+      puts "   Child.bmi = #{@bmi} kg/m2"
 
       # read JSON data in from file
       lms_hash = JSON.parse File.read './data/uk90-lms-data.json'
@@ -63,6 +70,8 @@ module ChildHealth
       l = lms["l"].to_f
       m = lms["m"].to_f
       s = lms["s"].to_f
+
+      puts "LMS variables from the lookup are: #{lms}"
 
       if l == 0
         z = log(x / m) / s
