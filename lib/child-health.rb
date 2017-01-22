@@ -22,6 +22,19 @@ module ChildHealth
       @sex = sex 
       @height = height.to_f
       @weight = weight.to_f
+      if @weight and @height
+        @bmi = @weight / ((@height/100)**2) # height converted from cm to m for this calculation only
+      else
+        @bmi = "0"
+      end
+
+      # these debugging notices need to go in a Logger really
+      puts "   Child.age = #{@age} months"
+      puts "   Child.sex = #{@sex}"
+      puts "Child.height = #{@height} cm"
+      puts "Child.weight = #{@weight} kg"
+      puts "   Child.bmi = #{@bmi} kg/m2"
+      puts
     end
 
     def height_centile
@@ -33,7 +46,6 @@ module ChildHealth
     end
 
     def bmi_centile
-      @bmi = @weight / ((@height/100)**2) # height converted from cm to m for this calculation only
       uk_centile @bmi, "bmi_centile"
     end
 
@@ -42,13 +54,6 @@ module ChildHealth
     def uk_centile(child_measurement, centile_type)
 
       # UK centiles use the WHO charts from 0-4 years, and the UK90 charts from 4-18 years old
-
-      # these debugging notices need to go in a Logger really
-      puts "   Child.age = #{@age} months"
-      puts "   Child.sex = #{@sex}"
-      puts "Child.height = #{@height} cm"
-      puts "Child.weight = #{@weight} kg"
-      puts "   Child.bmi = #{@bmi} kg/m2"
 
       # read JSON data in from file
       lms_hash = JSON.parse File.read './data/uk90-lms-data.json'
@@ -59,7 +64,9 @@ module ChildHealth
 
       return ' age must be a positive integer number of months and between 0 and 276 ' unless lms_hash[sex][centile_type].include? @age.to_s
 
-      return lms_to_centile child_measurement, lms_hash[sex][centile_type][@age.to_s]
+      result = lms_to_centile child_measurement, lms_hash[sex][centile_type][@age.to_s]
+
+      return "=> #{centile_type} = #{result.to_s}"
     end
 
     def lms_to_centile(x, lms)
@@ -71,15 +78,13 @@ module ChildHealth
       m = lms["m"].to_f
       s = lms["s"].to_f
 
-      puts "LMS variables from the lookup are: #{lms}"
+      puts "\n LMS variables from the lookup are: #{lms}"
 
       if l == 0
         z = log(x / m) / s
       else
         z = (((x / m)**l) - 1) / (l * s)
       end
-
-      puts z
 
       Distribution::Normal.cdf(z) * 100
     end

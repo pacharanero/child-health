@@ -1,2 +1,14 @@
 #!/usr/bin/env ruby
 
+# basic command line tool for the child-health gem
+# used for demonstration and testing
+# usage:
+# `$ centile age sex height weight`
+
+require_relative '../lib/child-health/child-health.rb'
+
+child = ChildHealth::Child.new(age: ARGV[0], sex: ARGV[1], height:ARGV[2], weight: ARGV[3])
+
+puts child.height_centile
+puts child.weight_centile
+puts child.bmi_centile
