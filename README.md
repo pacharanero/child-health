@@ -51,10 +51,10 @@ This object has some other methods which will return the parameters we are inter
 `ChildHealth::Child#weight_centile`
 `ChildHealth::Child#bmi_centile`
 
-##What are these 'Centiles' anyway?
+## What are these 'Centiles' anyway?
 Centiles (short for Percentiles) are a statistical measure of where a gievn measurement is within its population. In the case of chilld growth, we want to know how this child compares to other children of the same sex, and at exactly the same age.
 
-A simple way to interpret a percentile is to think of it as the percentage of children that are *shorter* (for height centile), or *weigh less* (for weight centile), or are *thinner* (for BMI centile) than the child we're testing.
+A simple way to interpret a percentile is to think of it as 'the percentage of children that are *shorter* (for height centile) / *weigh less* (for weight centile) / *thinner* (for BMI centile) than the child we're testing'.
 
 In medical practice, a single centile on its own is of almost no use, and we take into account numerous centile observations over time when making clinical decisions. A child whose centiles change rapidly (either up or down) over a short period of time may present a cause for concern.
 
