@@ -1,5 +1,7 @@
 # child-health
-A Ruby Gem for calculating important medical child health parameters such as growth charts and BMI-centile
+A Ruby Gem for calculating important medical child health parameters such as growth charts and BMI-centile.
+
+**IMPORTANT**: This library does not yet use interpolation to enable it to return accurate centiles in between the 2-week spacings of the standard data in the UK90 LMS and WHO data tables. Therefore you should not rely on this gem in its current form to make clinical decisions.
 
 This gem can be used from the command line (eg for testing/evaluation of the gem) and also in other Ruby programs. The centile code has been abstracted out from the Clinical Calculator API, in order to make the code more reusable.
 
@@ -33,7 +35,7 @@ In your Ruby program or IRB:
 
 Instantiate a Child object:
 
-`child = ChildHealth::Child.new(age: <age>, sex: <sex>, height: <height>, weight: <weight>)``
+`child = ChildHealth::Child.new(age: <age>, sex: <sex>, height: <height>, weight: <weight>)`
 
 Note the use of named parameters in the arguments to Child.new - this means that the parameters can be given in any order. 
 
@@ -41,15 +43,15 @@ The defaults are (age: 0, sex: nil height: 0 weight: 0) - they are set like this
 
 The instantiation should return a Child object, here's an example:
 
-`2.3.0 :113 > child = ChildHealth::Child.new(age: 54, height: 112, weight: 21, sex: "male")``
-`=> #<ChildHealth::Child:0x00000001e596a0 @age=54, @sex="male", @weight=21.0, @height=112.0>`` 
+`2.3.0 :113 > child = ChildHealth::Child.new(age: 54, height: 112, weight: 21, sex: "male")`
+`=> #<ChildHealth::Child:0x00000001e596a0 @age=54, @sex="male", @weight=21.0, @height=112.0>`
 
 
 This object has some other methods which will return the parameters we are interested in calculating:
 
-`ChildHealth::Child#height_centile #=> returns the centile`
-`ChildHealth::Child#weight_centile`
-`ChildHealth::Child#bmi_centile`
+`ChildHealth::Child#height_centile #=> returns the centile`   
+`ChildHealth::Child#weight_centile`   
+`ChildHealth::Child#bmi_centile`   
 
 ## What are these 'Centiles' anyway?
 Centiles (short for Percentiles) are a statistical measure of where a gievn measurement is within its population. In the case of chilld growth, we want to know how this child compares to other children of the same sex, and at exactly the same age.
